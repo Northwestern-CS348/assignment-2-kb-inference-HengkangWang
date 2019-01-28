@@ -74,7 +74,7 @@ To grade this lab, we'll run several test cases similar to the ones provided. In
 #### Implementing `kb_retract`
 
 - An asserted fact should only be removed if it is unsupported.
-- Rules must never be retracted and an asserted rule should never be removed.
+- An asserted rule should never be removed.
 - Use the `supports_rules` and `supports_facts` fields to find and adjust facts and rules that are supported by a retracted fact.
   - The `supported_by` lists in each fact/rule that it supports needs to be adjusted accordingly.
   - If a supported fact/rule is no longer supported as a result of retracting this fact (and is not asserted), it should also be removed.
