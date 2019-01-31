@@ -128,8 +128,57 @@ class KnowledgeBase(object):
         printv("Retracting {!r}", 0, verbose, [fact_or_rule])
         ####################################################
         # Student code goes here
-        
-
+        if isinstance(fact_or_rule, Fact) and fact_or_rule in self.facts:
+            ind = self.facts.index(fact_or_rule)
+            fact_or_rule = self.facts[ind]
+            if len(fact_or_rule.supported_by) == 0:
+                self.retract_helper(fact_or_rule)
+            else:
+                fact_or_rule.asserted = False
+            
+    def retract_helper(self, fact_or_rule):
+        if fact_or_rule in self.facts:
+            ind = self.facts.index(fact_or_rule)
+            fact_or_rule = self.facts[ind]
+            if len(fact_or_rule.supported_by) == 0:
+                for rule in fact_or_rule.supports_rules:
+                    ind = self.rules.index(rule)
+                    for sb in self.rules[ind].supported_by:
+                        for x in sb:
+                            if x == fact_or_rule:
+                                sb = self.rules[ind].supported_by.index(sb)
+                                del self.rules[ind].supported_by[sb]
+                    self.retract_helper(rule)
+                for fact in fact_or_rule.supports_facts:
+                    ind = self.facts.index(fact)
+                    for sb in self.facts[ind].supported_by:
+                        for x in sb:
+                            if x == fact_or_rule:
+                                sb = self.facts[ind].supported_by.index(sb)
+                                del self.facts[ind].supported_by[sb]
+                    self.retract_helper(fact)
+                self.facts.remove(fact_or_rule)
+        elif fact_or_rule in self.rules:
+            ind = self.rules.index(fact_or_rule)
+            fact_or_rule = self.rules[ind]
+            if len(fact_or_rule.supported_by) == 0:
+                for rule in fact_or_rule.supports_rules:
+                    ind = self.rules.index(rule)
+                    for sb in self.rules[ind].supported_by:
+                        for x in sb:
+                            if x == fact_or_rule:
+                                sb = self.rules[ind].supported_by.index(sb)
+                                del self.rules[ind].supported_by[sb]
+                    self.retract_helper(rule)
+                for fact in fact_or_rule.supports_facts:
+                    ind = self.facts.index(fact)
+                    for sb in self.facts[ind].supported_by:
+                        for x in sb:
+                            if x == fact_or_rule:
+                                sb = self.facts[ind].supported_by.index(sb)
+                                del self.facts[ind].supported_by[sb]
+                    self.retract_helper(fact)
+                self.rules.remove(fact_or_rule)
 class InferenceEngine(object):
     def fc_infer(self, fact, rule, kb):
         """Forward-chaining to infer new facts and rules
@@ -146,3 +195,25 @@ class InferenceEngine(object):
             [fact.statement, rule.lhs, rule.rhs])
         ####################################################
         # Student code goes here
+        
+        bindings = match(fact.statement, rule.lhs[0])
+        if bindings:
+            if len(rule.lhs) == 1:
+                new_fact = Fact(instantiate(rule.rhs, bindings),[[fact,rule]])
+                kb.kb_add(new_fact)
+                ind = kb.facts.index(fact)
+                kb.facts[ind].supports_facts.append(new_fact)
+                ind = kb.rules.index(rule)
+                kb.rules[ind].supports_facts.append(new_fact)
+            else:
+                new_rule = Rule([rule.lhs, rule.rhs],[[fact,rule]])
+                del new_rule.lhs[0]
+                for i in range(len(new_rule.lhs)):
+                    new_rule.lhs[i] = instantiate(new_rule.lhs[i], bindings)
+                new_rule.rhs = instantiate(new_rule.rhs, bindings)
+                kb.kb_add(new_rule)
+                ind = kb.facts.index(fact)
+                kb.facts[ind].supports_rules.append(new_rule)
+                ind = kb.rules.index(rule)
+                kb.rules[ind].supports_rules.append(new_rule)
+                    

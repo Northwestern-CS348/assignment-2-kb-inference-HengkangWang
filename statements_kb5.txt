@@ -1,0 +1,7 @@
+fact: (parent A B)
+fact: (parent B C)
+fact: (parent A D)
+fact: (uncle D C)
+
+rule: ((parent ?x ?y) (parent ?y ?z)) -> (grandparent ?x ?z)
+rule: ((parent ?x ?y) (uncle ?y ?z)) -> (grandparent ?x ?z)	
