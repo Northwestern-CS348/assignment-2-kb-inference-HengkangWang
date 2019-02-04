@@ -141,43 +141,35 @@ class KnowledgeBase(object):
             ind = self.facts.index(fact_or_rule)
             fact_or_rule = self.facts[ind]
             if len(fact_or_rule.supported_by) == 0:
-                for rule in fact_or_rule.supports_rules:
-                    ind = self.rules.index(rule)
-                    for sb in self.rules[ind].supported_by:
-                        for x in sb:
-                            if x == fact_or_rule:
-                                sb = self.rules[ind].supported_by.index(sb)
-                                del self.rules[ind].supported_by[sb]
-                    self.retract_helper(rule)
-                for fact in fact_or_rule.supports_facts:
-                    ind = self.facts.index(fact)
-                    for sb in self.facts[ind].supported_by:
-                        for x in sb:
-                            if x == fact_or_rule:
-                                sb = self.facts[ind].supported_by.index(sb)
-                                del self.facts[ind].supported_by[sb]
-                    self.retract_helper(fact)
+                for i in range(len(fact_or_rule.supports_rules))[::-1]:
+                    ind = self.rules.index(fact_or_rule.supports_rules[i])
+                    for j in range(len(self.rules[ind].supported_by))[::-1]:
+                        if fact_or_rule in self.rules[ind].supported_by[j]:
+                            del self.rules[ind].supported_by[j]
+                    self.retract_helper(fact_or_rule.supports_rules[i])
+                for i in range(len(fact_or_rule.supports_facts))[::-1]:
+                    ind = self.facts.index(fact_or_rule.supports_facts[i])
+                    for j in range(len(self.facts[ind].supported_by))[::-1]:
+                        if fact_or_rule in self.facts[ind].supported_by[j]:
+                            del self.facts[ind].supported_by[j]
+                    self.retract_helper(fact_or_rule.supports_facts[i])
                 self.facts.remove(fact_or_rule)
         elif fact_or_rule in self.rules:
             ind = self.rules.index(fact_or_rule)
             fact_or_rule = self.rules[ind]
             if len(fact_or_rule.supported_by) == 0:
-                for rule in fact_or_rule.supports_rules:
-                    ind = self.rules.index(rule)
-                    for sb in self.rules[ind].supported_by:
-                        for x in sb:
-                            if x == fact_or_rule:
-                                sb = self.rules[ind].supported_by.index(sb)
-                                del self.rules[ind].supported_by[sb]
-                    self.retract_helper(rule)
-                for fact in fact_or_rule.supports_facts:
-                    ind = self.facts.index(fact)
-                    for sb in self.facts[ind].supported_by:
-                        for x in sb:
-                            if x == fact_or_rule:
-                                sb = self.facts[ind].supported_by.index(sb)
-                                del self.facts[ind].supported_by[sb]
-                    self.retract_helper(fact)
+                for i in range(len(fact_or_rule.supports_rules))[::-1]:
+                    ind = self.rules.index(fact_or_rule.supports_rules[i])
+                    for j in range(len(self.rules[ind].supported_by))[::-1]:
+                        if fact_or_rule in self.rules[ind].supported_by[j]:
+                            del self.rules[ind].supported_by[j]
+                    self.retract_helper(fact_or_rule.supports_rules[i])
+                for i in range(len(fact_or_rule.supports_facts))[::-1]:
+                    ind = self.facts.index(fact_or_rule.supports_facts[i])
+                    for j in range(len(self.facts[ind].supported_by))[::-1]:
+                        if fact_or_rule in self.facts[ind].supported_by[j]:
+                            del self.facts[ind].supported_by[j]
+                    self.retract_helper(fact_or_rule.supports_facts[i])
                 self.rules.remove(fact_or_rule)
 class InferenceEngine(object):
     def fc_infer(self, fact, rule, kb):
