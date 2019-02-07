@@ -1,0 +1,28 @@
+TESTS WITH ERRORS 
+test13 (gradingtests.UnitTests)
+Traceback (most recent call last):
+  File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference/gradingtests.py", line 373, in test13
+    self.assertTrue(str(answer1[0]).startswith("No bindings"))
+IndexError: list index out of range
+
+test14 (gradingtests.UnitTests)
+Traceback (most recent call last):
+  File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference/gradingtests.py", line 405, in test14
+    KB.kb_retract(fact2)
+  File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference/student_code.py", line 135, in kb_retract
+    self.retract_helper(fact_or_rule)
+  File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference/student_code.py", line 151, in retract_helper
+    ind = self.facts.index(fact_or_rule.supports_facts[i])
+ValueError: Fact('fact', Statement('heathyPerson', [Term(Constant('A'))]), False, [], [], []) is not in list
+
+-------------------------------
+TESTS FAILED  
+test5 (gradingtests.UnitTests)
+Traceback (most recent call last):
+  File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference/gradingtests.py", line 151, in test5
+    self.assertTrue(len(answer4) > 0)
+AssertionError: False is not true
+
+-------------------------------
+TESTS SKIPPED 
+-------------------------------
